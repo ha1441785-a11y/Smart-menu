@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الطلب الذكي</title>
+    <style>
+        :root { --primary-color: #e67e22; --secondary-color: #2ecc71; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .table-badge { background: var(--primary-color); color: white; padding: 5px 15px; border-radius: 50px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #f1f1f1; border-radius: 12px; margin-bottom: 10px; transition: 0.3s; }
+        .menu-item:hover { border-color: var(--primary-color); }
+        .item-info b { display: block; color: #2c3e50; }
+        .price { color: var(--secondary-color); font-weight: bold; }
+        .add-btn { background: var(--primary-color); color: white; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: bold; }
+        .cart-section { margin-top: 30px; background: #fff3e0; padding: 15px; border-radius: 12px; border: 1px dashed var(--primary-color); }
+        .order-btn { background: var(--secondary-color); color: white; border: none; width: 100%; padding: 15px; font-size: 18px; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); }
+        .footer-rights { text-align: center; margin-top: 20px; font-size: 12px; color: #95a5a6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="table-badge" id="tableLabel">طاولة رقم: ..</div>
+        <h1>🍽️ قائمة الطعام</h1>
+    </div>
+
+    <div id="menu">
+        <div class="menu-item">
+            <div class="item-info"><b>وجبة شاورما عائلي</b> <span class="price">45 ريال</span></div>
+            <button class="add-btn" onclick="addToCart('شاورما عائلي', 45)">أضف +</button>
+        </div>
+        <div class="menu-item">
+            <div class="item-info"><b>بيتزا مارغريتا</b> <span class="price">35 ريال</span></div>
+            <button class="add-btn" onclick="addToCart('بيتزا مارغريتا', 35)">أضف +</button>
+        </div>
+        <div class="menu-item">
+            <div class="item-info"><b>كولا بارد</b> <span class="price">5 ريال</span></div>
+            <button class="add-btn" onclick="addToCart('كولا بارد', 5)">أضف +</button>
+        </div>
+    </div>
+
+    <div class="cart-section">
+        <h3>🛒 ملخص طلبك:</h3>
+        <ul id="cartItems" style="list-style: none; padding: 0;"></ul>
+        <hr>
+        <p style="display: flex; justify-content: space-between;"><strong>الإجمالي:</strong> <strong id="totalPrice">0</strong> <strong>ريال</strong></p>
+        <button class="order-btn" onclick="sendToWhatsApp()">إرسال الطلب عبر واتساب</button>
+    </div>
+
+    <div class="footer-rights">
+        نظام طلبات ذكي - تطوير: [Mohammed Ali]
+    </div>
+</div>
+
+<script>
+    // 1. إعدادات صاحب المطعم (07512331182 )
+    const restaurantPhone = "9665XXXXXXXX"; // ضع رقم المطعم مع مفتاح الدولة بدون +
+
+    // 2. قراءة رقم الطاولة من الرابط
+    const params = new URLSearchParams(window.location.search);
+    const tableNo = params.get('table') || "غير محددة";
+    document.getElementById('tableLabel').innerText = "طاولة رقم: " + tableNo;
+
+    let cart = [];
+    let total = 0;
+
+    function addToCart(name, price) {
+        cart.push({name, price});
+        total += price;
+        renderCart();
+    }
+
+    function renderCart() {
+        const list = document.getElementById('cartItems');
+        list.innerHTML = cart.map(item => `<li>✅ ${item.name} (${item.price} ريال)</li>`).join('');
+        document.getElementById('totalPrice').innerText = total;
+    }
+
+    function sendToWhatsApp() {
+        if(cart.length === 0) { alert("من فضلك اختر الطعام أولاً"); return; }
+        
+        let itemsList = cart.map(i => "- " + i.name).join('%0A');
+        let message = `طلب جديد من طاولة رقم: ${tableNo}%0A%0Aالطلبات:%0A${itemsList}%0A%0Aالإجمالي: ${total} ريال`;
+        
+        // فتح الواتساب
+        window.open(`https://wa.me/${restaurantPhone}?text=${message}`);
+    }
+</script>
+
+</body>
+</html>
