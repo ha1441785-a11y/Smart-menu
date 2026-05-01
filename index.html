@@ -41,9 +41,41 @@
         /* السلة السفلي */
         .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-radius: 25px 25px 0 0; }
         .order-btn { background: var(--secondary); color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
-    </style>
+    </style> /* نافذة تأكيد الطلب */
+.confirm-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;
+}
+.confirm-box {
+    background: white; width: 90%; max-width: 400px; border-radius: 20px;
+    padding: 20px; text-align: center; direction: rtl;
+}
+.confirm-items { text-align: right; margin: 15px 0; border-top: 1px dashed #ccc; border-bottom: 1px dashed #ccc; padding: 10px 0; max-height: 200px; overflow-y: auto; }
+.confirm-footer { display: flex; gap: 10px; margin-top: 20px; }
+.btn-final { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
+.btn-send { background: var(--secondary); color: white; }
+.btn-back { background: #eee; color: #333; }
+
 </head>
 <body>
+<div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-box">
+        <h3>📄 مراجعة الطلب</h3>
+        <p style="font-size: 0.9rem; color: #666;">طاولة رقم: <span id="confTable"></span></p>
+        <div id="confirmItems" class="confirm-items">
+            </div>
+        <div style="text-align: left; font-weight: bold; margin-bottom: 10px;">
+            المجموع: <span id="confTotal"></span> د.ع
+        </div>
+        <div style="font-size: 0.8rem; color: #999; margin-bottom: 15px;">
+            الوقت: <span id="confTime"></span>
+        </div>
+        <div class="confirm-footer">
+            <button class="btn-final btn-send" onclick="executeSend()">تأكيد وإرسال ✅</button>
+            <button class="btn-final btn-back" onclick="closeConfirm()">رجوع</button>
+        </div>
+    </div>
+</div>
 
 <div class="fixed-header">
     <div class="nav-tabs">
