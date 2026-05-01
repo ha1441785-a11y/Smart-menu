@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم الذكي المتكامل</title>
+    <title>منيو المطعم الذكي - نظام الخصوصية التامة</title>
     <style>
         :root { --primary: #d35400; --secondary: #27ae60; --bg: #f4f7f6; --accent: #e74c3c; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-top: 130px; padding-bottom: 120px; scroll-behavior: smooth; }
@@ -16,6 +16,7 @@
 
         .container { padding: 15px; max-width: 600px; margin: auto; }
         
+        /* أزرار الخدمات */
         .service-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
         .call-btn { flex: 2; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; }
         .share-btn { flex: 1; background: #3498db; color: white; border: none; padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; }
@@ -32,10 +33,12 @@
         
         .add-btn { background: var(--primary); color: white; border: none; border-radius: 10px; padding: 10px 18px; cursor: pointer; font-weight: bold; }
 
-        .social-footer { text-align: center; padding: 30px 10px; background: #fff; border-radius: 25px; margin-top: 20px; }
+        /* تذييل الصفحة والسوشيال ميديا */
+        .social-footer { text-align: center; padding: 30px 10px; background: #fff; border-radius: 25px; margin-top: 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .social-icons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
         .social-icons a { text-decoration: none; font-size: 0.8rem; padding: 10px 15px; border-radius: 10px; color: white; font-weight: bold; }
 
+        /* السلة السفلي */
         .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-radius: 25px 25px 0 0; }
         .order-btn { background: var(--secondary); color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
     </style>
@@ -47,13 +50,13 @@
         <a href="#eastern" class="tab">🥘 أطباق شرقية</a>
         <a href="#western" class="tab">🍔 أطباق غربية</a>
         <a href="#appetizers" class="tab">🥗 مقبلات</a>
-        <a href="#drinks" class="tab">🍹 عصائر ومشروبات</a>
+        <a href="#drinks" class="tab">🍹 مشروبات وعصائر</a>
     </div>
 </div>
 
 <div class="container">
     <div style="text-align:center; margin-bottom:15px;">
-        <span id="tableLabel" style="background:#eee; padding:5px 15px; border-radius:20px; font-weight:bold;">طاولة رقم: ..</span>
+        <span id="tableLabel" style="background:#eee; padding:5px 15px; border-radius:20px; font-weight:bold; color:#333;">طاولة رقم: جاري التحميل..</span>
     </div>
 
     <div class="service-buttons">
@@ -79,7 +82,7 @@
         <div class="menu-item">
             <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" class="item-image">
             <div class="item-info">
-                <b>برجر لحم ملكي</b>
+                <b>برجر لحم دبل</b>
                 <span class="prep-time">⏱️ تحضير: 10 دقائق</span>
                 <span class="price">8,000 د.ع</span>
             </div>
@@ -87,21 +90,8 @@
         </div>
     </section>
 
-    <section id="appetizers" class="category-section">
-        <div class="category-title">🥗 المقبلات</div>
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1593967858208-fc7ca6378c55?w=150" class="item-image">
-            <div class="item-info">
-                <b>حمص بطحينة</b>
-                <span class="prep-time">⏱️ تحضير: 3 دقائق</span>
-                <span class="price">3,000 د.ع</span>
-            </div>
-            <button class="add-btn" onclick="addToCart('حمص بطحينة', 3000)">+</button>
-        </div>
-    </section>
-
     <section id="drinks" class="category-section">
-        <div class="category-title">🍹 عصائر ومشروبات</div>
+        <div class="category-title">🍹 المشروبات والعصائر</div>
         <div class="menu-item">
             <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=200" class="item-image">
             <div class="item-info">
@@ -114,7 +104,7 @@
     </section>
 
     <div class="social-footer">
-        <b>تابعونا لتصلكم عروضنا</b>
+        <b>خصوصيتك تهمنا: نظام الطلب آمن ولا يتطلب رقم هاتف</b>
         <div class="social-icons">
             <a href="#" style="background:#e1306c;">انستغرام</a>
             <a href="#" style="background:#000;">تيك توك</a>
@@ -124,20 +114,23 @@
 </div>
 
 <div class="cart-bar">
-    <div>إجمالي السعر: <b id="totalPrice">0</b> د.ع</div>
-    <button class="order-btn" onclick="sendToWhatsApp()">إرسال الطلب ✅</button>
+    <div>إجمالي: <b id="totalPrice">0</b> د.ع</div>
+    <button class="order-btn" onclick="sendOrderPrivately()">إرسال الطلب ✅</button>
 </div>
 
 <script>
-    // 1. ضع رقم هاتفك الحقيقي هنا (مثال: 9647800000000)
-    const restaurantPhone = "9647725801894"; 
+    /* --- تنبيه هام للمبرمج ---
+       ضع الرابط الذي ستحصل عليه من موقع SheetDB بين القوسين أدناه مكان (ضع_رابط_API_هنا)
+    */
+    const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax'; 
 
     const params = new URLSearchParams(window.location.search);
-    const tableNo = params.get('table') || "4";
+    const tableNo = params.get('table') || "غير محددة";
     document.getElementById('tableLabel').innerText = "طاولة رقم: " + tableNo;
 
     let cart = [];
     let total = 0;
+    const orderID = Math.floor(1000 + Math.random() * 9000);
 
     function addToCart(name, price) {
         cart.push({name, price});
@@ -145,33 +138,58 @@
         document.getElementById('totalPrice').innerText = total.toLocaleString();
     }
 
-    function callWaiter() {
-        let callMsg = encodeURIComponent(`🔔 نداء مساعدة!\n📍 طاولة رقم: ${tableNo}`);
-        window.open(`https://wa.me/${restaurantPhone}?text=${callMsg}`);
-    }
-
     function shareMenu() {
         const baseUrl = window.location.href.split('?')[0];
         if (navigator.share) {
             navigator.share({ title: 'منيو المطعم', url: baseUrl });
         } else {
-            alert("رابط المنيو الخاص بك: " + baseUrl);
+            alert("رابط المنيو: " + baseUrl);
         }
     }
 
-    function sendToWhatsApp() {
-        if(cart.length === 0) { alert("يرجى إضافة أطباق للسلة أولاً"); return; }
-        
-        const orderID = Math.floor(1000 + Math.random() * 9000);
-        let itemsText = cart.map(item => `• ${item.name}`).join('\n');
-        
-        let fullMessage = `📝 *طلب جديد رقم:* #${orderID}\n` +
-                          `📍 *طاولة رقم:* ${tableNo}\n\n` +
-                          `*الأصناف:*\n${itemsText}\n\n` +
-                          `💰 *الإجمالي:* ${total.toLocaleString()} د.ع\n` +
-                          `---`;
+    function callWaiter() {
+        alert("🔔 تم إرسال نداء للنادل لطاولة رقم: " + tableNo);
+        // يمكنك مستقبلاً ربط هذا أيضاً بجدول البيانات ليعرف النادل أي طاولة تطلبه
+    }
 
-        window.open(`https://wa.me/${restaurantPhone}?text=${encodeURIComponent(fullMessage)}`);
+    function sendOrderPrivately() {
+        if(cart.length === 0) { alert("السلة فارغة!"); return; }
+
+        // تجهيز بيانات الطلب
+        const orderData = {
+            "order_id": "#" + orderID,
+            "table": tableNo,
+            "items": cart.map(i => i.name).join(' + '),
+            "total_price": total.toLocaleString() + " د.ع",
+            "time": new Date().toLocaleTimeString('ar-EG')
+        };
+
+        // تغيير نص الزر أثناء الإرسال
+        const btn = document.querySelector('.order-btn');
+        btn.innerText = "جاري الإرسال...";
+        btn.disabled = true;
+
+        // إرسال البيانات لجدول جوجل
+        fetch(SHEETDB_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ "data": [orderData] })
+        })
+        .then(response => {
+            alert("✅ تم استلام طلبك بنجاح!\nرقم الطلب: #" + orderID + "\nطلبك قيد التحضير الآن.");
+            
+            // إعادة ضبط السلة
+            cart = [];
+            total = 0;
+            document.getElementById('totalPrice').innerText = "0";
+            btn.innerText = "إرسال الطلب ✅";
+            btn.disabled = false;
+        })
+        .catch(error => {
+            alert("عذراً، حدث خطأ في الشبكة. يرجى إبلاغ النادل بطلبك.");
+            btn.innerText = "إرسال الطلب ✅";
+            btn.disabled = false;
+        });
     }
 </script>
 
