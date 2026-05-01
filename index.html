@@ -3,168 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم الملكي</title>
+    <title>المنيو الملكي المطور</title>
     <style>
-        :root { 
-            --primary: #fb6107; --secondary: #219653; --bg: #fdfdfd; 
-            --text-dark: #2d3436; --shadow: 0 10px 30px rgba(0,0,0,0.08); 
-        }
+        :root { --primary: #fb6107; --secondary: #219653; --bg: #fdfdfd; --text: #2d3436; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-top: 140px; padding-bottom: 110px; }
         
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; 
-            background: var(--bg); margin: 0; color: var(--text-dark);
-            padding-top: 140px; padding-bottom: 110px;
-        }
-
-        /* الهيدر الحديث */
-        .fixed-header { 
-            position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); 
-            backdrop-filter: blur(10px); z-index: 1000; padding-bottom: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
-        }
-
-        .nav-tabs { 
-            display: flex; overflow-x: auto; padding: 15px; gap: 12px; scrollbar-width: none;
-        }
-        .nav-tabs::-webkit-scrollbar { display: none; }
-        
-        .tab { 
-            background: #fff; padding: 10px 22px; border-radius: 50px; 
-            text-decoration: none; color: #636e72; font-weight: 600; 
-            font-size: 0.9rem; border: 1px solid #f1f2f6; transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        .tab:active { background: var(--primary); color: white; transform: scale(0.95); }
+        /* الهيدر العلوي */
+        .fixed-header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .nav-tabs { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
+        .tab { background: #fff; padding: 8px 20px; border-radius: 50px; text-decoration: none; color: #666; border: 1px solid #eee; white-space: nowrap; font-weight: bold; }
 
         .container { padding: 0 20px; max-width: 500px; margin: auto; }
+        .category-title { font-size: 1.3rem; font-weight: bold; margin: 20px 0; color: var(--text); }
 
-        /* الأقسام */
-        .category-title { 
-            font-size: 1.4rem; font-weight: 800; margin: 25px 0 15px;
-            display: flex; align-items: center; gap: 10px; color: #2d3436;
-        }
-
-        /* بطاقة الطعام المحدثة */
-        .menu-item { 
-            background: white; display: flex; align-items: center; padding: 12px; 
-            border-radius: 20px; margin-bottom: 18px; position: relative;
-            box-shadow: var(--shadow); transition: 0.3s; border: 1px solid rgba(0,0,0,0.02);
-        }
-        .item-image { 
-            width: 90px; height: 90px; border-radius: 16px; 
-            object-fit: cover; margin-left: 15px;
-        }
+        /* بطاقة الطعام */
+        .menu-item { background: white; display: flex; align-items: center; padding: 12px; border-radius: 20px; margin-bottom: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .item-image { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; margin-left: 15px; }
         .item-info { flex-grow: 1; }
-        .item-info b { font-size: 1.1rem; display: block; margin-bottom: 4px; }
-        .price { color: var(--secondary); font-weight: 800; font-size: 1.1rem; }
+        .price { color: var(--secondary); font-weight: bold; }
+        
+        /* العداد الأحمر */
+        .item-count { position: absolute; top: -5px; right: -5px; background: #e74c3c; color: white; width: 24px; height: 24px; border-radius: 50%; display: none; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: bold; border: 2px solid white; }
 
-        /* زر الإضافة والعداد */
-        .add-btn { 
-            background: var(--primary); color: white; border: none; 
-            width: 35px; height: 35px; border-radius: 12px; 
-            font-size: 1.4rem; cursor: pointer; transition: 0.2s;
-        }
-        .item-count { 
-            position: absolute; top: -8px; right: -8px; 
-            background: #e74c3c; color: white; width: 26px; height: 26px; 
-            border-radius: 50%; display: none; justify-content: center; 
-            align-items: center; font-size: 0.8rem; font-weight: bold; 
-            border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; }
 
-        /* نافذة التأكيد المعاصرة */
-        .confirm-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(5px);
-            justify-content: center; align-items: flex-end; 
-        }
-        .confirm-box { 
-            background: white; width: 100%; max-width: 500px; 
-            border-radius: 30px 30px 0 0; padding: 30px 20px;
-            animation: slideUp 0.4s ease-out;
-        }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        /* نافذة التأكيد */
+        .confirm-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: flex-end; }
+        .confirm-box { background: white; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box; }
+        .conf-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .del-btn { color: #ff4d4f; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        .conf-item-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 0; border-bottom: 1px solid #f1f2f6; 
-        }
-        .remove-icon { 
-            background: #fff1f0; color: #ff4d4f; padding: 5px 10px; 
-            border-radius: 10px; font-size: 0.8rem; cursor: pointer;
-        }
-
-        /* بار السعر السفلي */
-        .cart-bar { 
-            position: fixed; bottom: 20px; left: 20px; right: 20px; 
-            background: #2d3436; color: white; padding: 15px 25px; 
-            border-radius: 25px; display: flex; justify-content: space-between; 
-            align-items: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .order-btn-main { 
-            background: var(--primary); color: white; border: none; 
-            padding: 10px 20px; border-radius: 15px; font-weight: bold; cursor: pointer;
-        }
-
+        /* البار السفلي */
+        .cart-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #2d3436; color: white; padding: 15px 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .order-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="fixed-header">
-    <div style="text-align:center; padding-top:10px;">
-        <span id="tableLabel" style="font-size:0.8rem; color:#999; font-weight:bold;">📍 طاولة رقم: --</span>
-    </div>
+    <div style="text-align:center; padding: 10px 0 0;"><small id="tableLabel">📍 طاولة رقم: غير محددة</small></div>
     <div class="nav-tabs">
         <a href="#eastern" class="tab">🥘 شرقي</a>
         <a href="#western" class="tab">🍔 غربي</a>
-        <a href="#drinks" class="tab">🥤 بيبسي</a>
+        <a href="#cold" class="tab">🥤 بيبسي</a>
         <a href="#hot" class="tab">☕ ساخن</a>
     </div>
 </div>
 
 <div class="container">
-    <section id="eastern" class="category-section">
-        <div class="category-title">الأكلات الشرقية</div>
-        <div class="menu-item" id="item-qozy">
+    <section id="eastern">
+        <div class="category-title">الوجبات الشرقية</div>
+        <div class="menu-item">
             <div class="item-count" id="cnt-qozy">0</div>
             <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=200" class="item-image">
-            <div class="item-info"><b>قوزي عراقي</b><span class="price">25,000 د.ع</span></div>
+            <div class="item-info"><b>قوزي عراقي</b><br><span class="price">25,000 د.ع</span></div>
             <button class="add-btn" onclick="addToCart('قوزي عراقي', 25000, 'qozy')">+</button>
         </div>
-        <div class="menu-item" id="item-kbab">
-            <div class="item-count" id="cnt-kbab">0</div>
-            <img src="https://images.unsplash.com/photo-1603360946369-dc9bb025810f?w=200" class="item-image">
-            <div class="item-info"><b>كباب لحم</b><span class="price">15,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('كباب لحم', 15000, 'kbab')">+</button>
-        </div>
     </section>
 
-    <section id="western" class="category-section">
-        <div class="category-title">الأكلات الغربية</div>
-        <div class="menu-item" id="item-brgr">
-            <div class="item-count" id="cnt-brgr">0</div>
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" class="item-image">
-            <div class="item-info"><b>برجر لحم</b><span class="price">8,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('برجر لحم', 8000, 'brgr')">+</button>
-        </div>
-    </section>
-
-    <section id="drinks" class="category-section">
+    <section id="cold">
         <div class="category-title">مشروبات غازية</div>
-        <div class="menu-item" id="item-pepsi">
-            <div class="item-count" id="cnt-pepsi">0</div>
+        <div class="menu-item">
+            <div class="item-count" id="cnt-pep">0</div>
             <img src="https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=200" class="item-image">
-            <div class="item-info"><b>بيبسي</b><span class="price">1,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('بيبسي', 1000, 'pepsi')">+</button>
+            <div class="item-info"><b>بيبسي</b><br><span class="price">1,000 د.ع</span></div>
+            <button class="add-btn" onclick="addToCart('بيبسي', 1000, 'pep')">+</button>
         </div>
     </section>
 
-    <section id="hot" class="category-section">
+    <section id="hot">
         <div class="category-title">مشروبات ساخنة</div>
-        <div class="menu-item" id="item-tea">
+        <div class="menu-item">
             <div class="item-count" id="cnt-tea">0</div>
             <img src="https://images.unsplash.com/photo-1544787210-2213d84ad96b?w=200" class="item-image">
-            <div class="item-info"><b>شاي مهيل</b><span class="price">500 د.ع</span></div>
+            <div class="item-info"><b>شاي مهيل</b><br><span class="price">500 د.ع</span></div>
             <button class="add-btn" onclick="addToCart('شاي مهيل', 500, 'tea')">+</button>
         </div>
     </section>
@@ -172,26 +84,28 @@
 
 <div id="confirmOverlay" class="confirm-overlay">
     <div class="confirm-box">
-        <h2 style="margin-top:0;">فاتورة الطلب</h2>
-        <div id="confirmItems" style="margin-bottom:20px;"></div>
-        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; border-top:2px solid #eee; padding-top:15px;">
+        <h3>📄 مراجعة الطلب</h3>
+        <div id="confirmItems"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-top:20px; font-size:1.2rem;">
             <span>الإجمالي:</span>
-            <span style="color:var(--secondary);"><span id="confTotal">0</span> د.ع</span>
+            <span><span id="confTotal">0</span> د.ع</span>
         </div>
-        <div style="display:flex; gap:10px; margin-top:25px;">
-            <button onclick="executeSend()" style="flex:2; background:var(--primary); color:white; border:none; padding:15px; border-radius:15px; font-weight:bold;">تأكيد الإرسال</button>
-            <button onclick="closeConfirm()" style="flex:1; background:#f1f2f6; border:none; padding:15px; border-radius:15px; font-weight:bold;">إغلاق</button>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="executeSend()" style="flex:2; background:var(--secondary); color:white; border:none; padding:15px; border-radius:15px; font-weight:bold;">تأكيد وإرسال ✅</button>
+            <button onclick="closeConfirm()" style="flex:1; background:#eee; border:none; border-radius:15px;">رجوع</button>
         </div>
     </div>
 </div>
 
 <div class="cart-bar">
-    <div>إجمالي: <b id="totalPrice" style="font-size:1.2rem;">0</b> د.ع</div>
-    <button class="order-btn-main" onclick="showConfirmation()">استعراض الطلب</button>
+    <div>إجمالي: <b id="totalPrice">0</b> د.ع</div>
+    <button class="order-btn" onclick="showConfirmation()">مراجعة الطلب</button>
 </div>
 
 <script>
-    const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax'; 
+    // الرابط الخاص بك من صورتك السابقة
+    const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax';
+    
     const params = new URLSearchParams(window.location.search);
     const tableNo = params.get('table') || "غير محددة";
     document.getElementById('tableLabel').innerText = "📍 طاولة رقم: " + tableNo;
@@ -216,7 +130,10 @@
         document.querySelectorAll('.item-count').forEach(el => { el.innerText = '0'; el.style.display = 'none'; });
         cart.forEach(item => {
             const el = document.getElementById('cnt-' + item.id);
-            if(el) { el.innerText = parseInt(el.innerText) + 1; el.style.display = 'flex'; }
+            if(el) { 
+                el.innerText = parseInt(el.innerText) + 1; 
+                el.style.display = 'flex'; 
+            }
         });
     }
 
@@ -224,9 +141,9 @@
         if(cart.length === 0) return;
         const itemsDiv = document.getElementById('confirmItems');
         itemsDiv.innerHTML = cart.map((item, index) => `
-            <div class="conf-item-row">
-                <span><b>${item.name}</b></span>
-                <span>${item.price.toLocaleString()} <span class="remove-icon" onclick="removeFromCart(${index})">❌ حذف</span></span>
+            <div class="conf-item">
+                <span><span class="del-btn" onclick="removeFromCart(${index})">❌</span> ${item.name}</span>
+                <span>${item.price.toLocaleString()}</span>
             </div>
         `).join('');
         document.getElementById('confTotal').innerText = cart.reduce((s,i)=>s+i.price,0).toLocaleString();
@@ -250,65 +167,10 @@
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ "data": [orderData] })
         }).then(() => {
-            alert("تم إرسال طلبك للمطبخ بنجاح! رقم طلبك: #" + orderID);
+            alert("تم إرسال طلبك بنجاح! رقم الطلب: #" + orderID);
             cart = []; updateUI(); closeConfirm();
         });
     }
 </script>
-
 </body>
 </html>
-        cart.forEach(item => {
-            const el = document.getElementById('cnt-' + item.id);
-            if(el) {
-                let current = parseInt(el.innerText);
-                el.innerText = current + 1;
-                el.style.display = 'flex';
-            }
-        });
-    }
-
-    function showConfirmation() {
-        if(cart.length === 0) return alert("السلة فارغة!");
-        const itemsDiv = document.getElementById('confirmItems');
-        itemsDiv.innerHTML = cart.map((item, index) => `
-            <div class="conf-item-row">
-                <div><span class="remove-icon" onclick="removeFromCart(${index})">❌</span> ${item.name}</div>
-                <div style="font-weight:bold;">${item.price.toLocaleString()}</div>
-            </div>
-        `).join('');
-        
-        document.getElementById('confTotal').innerText = total.toLocaleString();
-        document.getElementById('confTime').innerText = "وقت الطلب: " + new Date().toLocaleTimeString('ar-EG');
-        document.getElementById('confirmOverlay').style.display = 'flex';
-    }
-
-    function closeConfirm() { document.getElementById('confirmOverlay').style.display = 'none'; }
-
-    function executeSend() {
-        const btn = document.querySelector('.btn-final');
-        const orderID = Math.floor(1000 + Math.random() * 9000);
-        
-        const orderData = {
-            "order_id": "#" + orderID,
-            "table": tableNo,
-            "items": cart.map(i => i.name).join(' + '),
-            "total_price": total.toLocaleString() + " د.ع",
-            "time": new Date().toLocaleTimeString('ar-EG')
-        };
-
-        fetch(SHEETDB_URL, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ "data": [orderData] })
-        })
-        .then(response => {
-            alert("✅ تم إرسال طلبك بنجاح! رقم الطلب: #" + orderID);
-            cart = []; updateUI(); closeConfirm();
-        })
-        .catch(error => alert("خطأ في الاتصال"));
-    }
-</script>
-</body>
-</html>
- 
