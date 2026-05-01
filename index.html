@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم الذكي - نظام الخصوصية التامة</title>
+    <title>منيو المطعم الذكي - النسخة الاحترافية</title>
     <style>
         :root { --primary: #d35400; --secondary: #27ae60; --bg: #f4f7f6; --accent: #e74c3c; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-top: 130px; padding-bottom: 120px; scroll-behavior: smooth; }
@@ -33,49 +33,27 @@
         
         .add-btn { background: var(--primary); color: white; border: none; border-radius: 10px; padding: 10px 18px; cursor: pointer; font-weight: bold; }
 
-        /* تذييل الصفحة والسوشيال ميديا */
-        .social-footer { text-align: center; padding: 30px 10px; background: #fff; border-radius: 25px; margin-top: 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .social-icons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .social-icons a { text-decoration: none; font-size: 0.8rem; padding: 10px 15px; border-radius: 10px; color: white; font-weight: bold; }
+        /* نافذة تأكيد الطلب */
+        .confirm-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .confirm-box {
+            background: white; width: 90%; max-width: 400px; border-radius: 20px;
+            padding: 20px; text-align: center; direction: rtl;
+        }
+        .confirm-items { text-align: right; margin: 15px 0; border-top: 1px dashed #ccc; border-bottom: 1px dashed #ccc; padding: 10px 0; max-height: 200px; overflow-y: auto; }
+        .confirm-footer { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-final { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-send { background: var(--secondary); color: white; }
+        .btn-back { background: #eee; color: #333; }
 
         /* السلة السفلي */
         .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-radius: 25px 25px 0 0; }
         .order-btn { background: var(--secondary); color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
-    </style> /* نافذة تأكيد الطلب */
-.confirm-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;
-}
-.confirm-box {
-    background: white; width: 90%; max-width: 400px; border-radius: 20px;
-    padding: 20px; text-align: center; direction: rtl;
-}
-.confirm-items { text-align: right; margin: 15px 0; border-top: 1px dashed #ccc; border-bottom: 1px dashed #ccc; padding: 10px 0; max-height: 200px; overflow-y: auto; }
-.confirm-footer { display: flex; gap: 10px; margin-top: 20px; }
-.btn-final { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
-.btn-send { background: var(--secondary); color: white; }
-.btn-back { background: #eee; color: #333; }
-
+    </style>
 </head>
 <body>
-<div id="confirmOverlay" class="confirm-overlay">
-    <div class="confirm-box">
-        <h3>📄 مراجعة الطلب</h3>
-        <p style="font-size: 0.9rem; color: #666;">طاولة رقم: <span id="confTable"></span></p>
-        <div id="confirmItems" class="confirm-items">
-            </div>
-        <div style="text-align: left; font-weight: bold; margin-bottom: 10px;">
-            المجموع: <span id="confTotal"></span> د.ع
-        </div>
-        <div style="font-size: 0.8rem; color: #999; margin-bottom: 15px;">
-            الوقت: <span id="confTime"></span>
-        </div>
-        <div class="confirm-footer">
-            <button class="btn-final btn-send" onclick="executeSend()">تأكيد وإرسال ✅</button>
-            <button class="btn-final btn-back" onclick="closeConfirm()">رجوع</button>
-        </div>
-    </div>
-</div>
 
 <div class="fixed-header">
     <div class="nav-tabs">
@@ -109,38 +87,22 @@
         </div>
     </section>
 
-    <section id="western" class="category-section">
-        <div class="category-title">🍔 الأكلات الغربية</div>
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" class="item-image">
-            <div class="item-info">
-                <b>برجر لحم دبل</b>
-                <span class="prep-time">⏱️ تحضير: 10 دقائق</span>
-                <span class="price">8,000 د.ع</span>
-            </div>
-            <button class="add-btn" onclick="addToCart('برجر لحم', 8000)">+</button>
-        </div>
-    </section>
+    </div>
 
-    <section id="drinks" class="category-section">
-        <div class="category-title">🍹 المشروبات والعصائر</div>
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=200" class="item-image">
-            <div class="item-info">
-                <b>عصير ليمون نعناع</b>
-                <span class="prep-time">⏱️ تحضير: 2 دقيقة</span>
-                <span class="price">3,000 د.ع</span>
-            </div>
-            <button class="add-btn" onclick="addToCart('عصير ليمون', 3000)">+</button>
+<div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-box">
+        <h3>📄 مراجعة الطلب</h3>
+        <p style="font-size: 0.9rem; color: #666;">طاولة رقم: <span id="confTable"></span></p>
+        <div id="confirmItems" class="confirm-items"></div>
+        <div style="text-align: left; font-weight: bold; margin-bottom: 10px;">
+            المجموع: <span id="confTotal"></span> د.ع
         </div>
-    </section>
-
-    <div class="social-footer">
-        <b>خصوصيتك تهمنا: نظام الطلب آمن ولا يتطلب رقم هاتف</b>
-        <div class="social-icons">
-            <a href="#" style="background:#e1306c;">انستغرام</a>
-            <a href="#" style="background:#000;">تيك توك</a>
-            <a href="#" style="background:#1877f2;">فيسبوك</a>
+        <div style="font-size: 0.8rem; color: #999; margin-bottom: 15px;">
+            الوقت: <span id="confTime"></span>
+        </div>
+        <div class="confirm-footer">
+            <button class="btn-final btn-send" onclick="executeSend()">تأكيد وإرسال ✅</button>
+            <button class="btn-final btn-back" onclick="closeConfirm()">رجوع</button>
         </div>
     </div>
 </div>
@@ -151,9 +113,7 @@
 </div>
 
 <script>
-    /* --- تنبيه هام للمبرمج ---
-       ضع الرابط الذي ستحصل عليه من موقع SheetDB بين القوسين أدناه مكان (ضع_رابط_API_هنا)
-    */
+    // ضع رابط API الخاص بك من SheetDB هنا
     const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax'; 
 
     const params = new URLSearchParams(window.location.search);
@@ -170,24 +130,27 @@
         document.getElementById('totalPrice').innerText = total.toLocaleString();
     }
 
-    function shareMenu() {
-        const baseUrl = window.location.href.split('?')[0];
-        if (navigator.share) {
-            navigator.share({ title: 'منيو المطعم', url: baseUrl });
-        } else {
-            alert("رابط المنيو: " + baseUrl);
-        }
-    }
-
-    function callWaiter() {
-        alert("🔔 تم إرسال نداء للنادل لطاولة رقم: " + tableNo);
-        // يمكنك مستقبلاً ربط هذا أيضاً بجدول البيانات ليعرف النادل أي طاولة تطلبه
-    }
-
     function sendOrderPrivately() {
-        if(cart.length === 0) { alert("السلة فارغة!"); return; }
+        if(cart.length === 0) return alert("السلة فارغة!");
+        
+        // عرض نافذة التأكيد
+        document.getElementById('confTable').innerText = tableNo;
+        document.getElementById('confTotal').innerText = total.toLocaleString();
+        document.getElementById('confTime').innerText = new Date().toLocaleTimeString('ar-EG');
+        document.getElementById('confirmItems').innerHTML = cart.map(i => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>${i.name}</span> <span>${i.price.toLocaleString()} د.ع</span>
+            </div>`).join('');
+        document.getElementById('confirmOverlay').style.display = 'flex';
+    }
 
-        // تجهيز بيانات الطلب
+    function closeConfirm() { document.getElementById('confirmOverlay').style.display = 'none'; }
+
+    function executeSend() {
+        const btn = document.querySelector('.btn-send');
+        btn.innerText = "جاري الإرسال...";
+        btn.disabled = true;
+
         const orderData = {
             "order_id": "#" + orderID,
             "table": tableNo,
@@ -196,34 +159,23 @@
             "time": new Date().toLocaleTimeString('ar-EG')
         };
 
-        // تغيير نص الزر أثناء الإرسال
-        const btn = document.querySelector('.order-btn');
-        btn.innerText = "جاري الإرسال...";
-        btn.disabled = true;
-
-        // إرسال البيانات لجدول جوجل
         fetch(SHEETDB_URL, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ "data": [orderData] })
         })
         .then(response => {
-            alert("✅ تم استلام طلبك بنجاح!\nرقم الطلب: #" + orderID + "\nطلبك قيد التحضير الآن.");
-            
-            // إعادة ضبط السلة
-            cart = [];
-            total = 0;
+            closeConfirm();
+            alert("✅ تم استلام طلبك بنجاح! رقم الطلب: #" + orderID);
+            cart = []; total = 0;
             document.getElementById('totalPrice').innerText = "0";
-            btn.innerText = "إرسال الطلب ✅";
-            btn.disabled = false;
+            btn.innerText = "تأكيد وإرسال ✅"; btn.disabled = false;
         })
-        .catch(error => {
-            alert("عذراً، حدث خطأ في الشبكة. يرجى إبلاغ النادل بطلبك.");
-            btn.innerText = "إرسال الطلب ✅";
-            btn.disabled = false;
-        });
+        .catch(error => { alert("خطأ في الشبكة"); btn.disabled = false; });
     }
-</script>
 
+    function callWaiter() { alert("🔔 تم نداء النادل للطاولة: " + tableNo); }
+    function shareMenu() { navigator.share ? navigator.share({url: window.location.href}) : alert(window.location.href); }
+</script>
 </body>
-    </html>
+</html>
