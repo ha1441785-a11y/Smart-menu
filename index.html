@@ -3,172 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنيو الملكي المطور</title>
+    <title>منيو المطعم</title>
     <style>
-        :root { --primary: #fb6107; --secondary: #219653; --bg: #fdfdfd; --text: #2d3436; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-top: 140px; padding-bottom: 110px; }
-        
-        /* الهيدر العلوي */
-        .fixed-header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
-        .nav-tabs { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-        .tab { background: #fff; padding: 8px 20px; border-radius: 50px; text-decoration: none; color: #666; border: 1px solid #eee; white-space: nowrap; font-weight: bold; }
-
-        .container { padding: 0 20px; max-width: 500px; margin: auto; }
-        .category-title { font-size: 1.3rem; font-weight: bold; margin: 20px 0; color: var(--text); }
-
-        /* بطاقة الطعام */
-        .menu-item { background: white; display: flex; align-items: center; padding: 12px; border-radius: 20px; margin-bottom: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .item-image { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; margin-left: 15px; }
+        :root { --primary: #fb6107; --bg: #fdfdfd; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding-top: 100px; padding-bottom: 100px; }
+        .fixed-header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 10px; display: flex; overflow-x: auto; gap: 10px; }
+        .tab { background: #eee; padding: 8px 15px; border-radius: 20px; text-decoration: none; color: #333; white-space: nowrap; font-size: 14px; }
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .menu-item { background: white; display: flex; align-items: center; padding: 15px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; }
         .item-info { flex-grow: 1; }
-        .price { color: var(--secondary); font-weight: bold; }
-        
-        /* العداد الأحمر */
-        .item-count { position: absolute; top: -5px; right: -5px; background: #e74c3c; color: white; width: 24px; height: 24px; border-radius: 50%; display: none; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: bold; border: 2px solid white; }
-
-        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; }
-
-        /* نافذة التأكيد */
-        .confirm-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: flex-end; }
-        .confirm-box { background: white; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box; }
-        .conf-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .del-btn { color: #ff4d4f; cursor: pointer; font-weight: bold; margin-left: 10px; }
-
-        /* البار السفلي */
-        .cart-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #2d3436; color: white; padding: 15px 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .order-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .price { color: #219653; font-weight: bold; }
+        .add-btn { background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 12px; font-size: 20px; cursor: pointer; }
+        .item-count { position: absolute; top: -5px; right: -5px; background: red; color: white; width: 22px; height: 22px; border-radius: 50%; display: none; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; border: 2px solid white; }
+        .cart-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #333; color: white; padding: 15px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .confirm-btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="fixed-header">
-    <div style="text-align:center; padding: 10px 0 0;"><small id="tableLabel">📍 طاولة رقم: غير محددة</small></div>
-    <div class="nav-tabs">
-        <a href="#eastern" class="tab">🥘 شرقي</a>
-        <a href="#western" class="tab">🍔 غربي</a>
-        <a href="#cold" class="tab">🥤 بيبسي</a>
-        <a href="#hot" class="tab">☕ ساخن</a>
-    </div>
+    <a href="#hot" class="tab">☕ مشروبات ساخنة</a>
+    <a href="#cold" class="tab">🥤 مشروبات غازية</a>
+    <a href="#food" class="tab">🥘 وجبات رئيسية</a>
 </div>
 
 <div class="container">
-    <section id="eastern">
-        <div class="category-title">الوجبات الشرقية</div>
-        <div class="menu-item">
-            <div class="item-count" id="cnt-qozy">0</div>
-            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=200" class="item-image">
-            <div class="item-info"><b>قوزي عراقي</b><br><span class="price">25,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('قوزي عراقي', 25000, 'qozy')">+</button>
-        </div>
-    </section>
+    <h3 id="hot">مشروبات ساخنة</h3>
+    <div class="menu-item">
+        <div class="item-count" id="cnt-tea">0</div>
+        <div class="item-info"><b>شاي مهيل</b><br><span class="price">500 د.ع</span></div>
+        <button class="add-btn" onclick="addToCart('شاي مهيل', 500, 'tea')">+</button>
+    </div>
 
-    <section id="cold">
-        <div class="category-title">مشروبات غازية</div>
-        <div class="menu-item">
-            <div class="item-count" id="cnt-pep">0</div>
-            <img src="https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=200" class="item-image">
-            <div class="item-info"><b>بيبسي</b><br><span class="price">1,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('بيبسي', 1000, 'pep')">+</button>
-        </div>
-    </section>
-
-    <section id="hot">
-        <div class="category-title">مشروبات ساخنة</div>
-        <div class="menu-item">
-            <div class="item-count" id="cnt-tea">0</div>
-            <img src="https://images.unsplash.com/photo-1544787210-2213d84ad96b?w=200" class="item-image">
-            <div class="item-info"><b>شاي مهيل</b><br><span class="price">500 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('شاي مهيل', 500, 'tea')">+</button>
-        </div>
-    </section>
-</div>
-
-<div id="confirmOverlay" class="confirm-overlay">
-    <div class="confirm-box">
-        <h3>📄 مراجعة الطلب</h3>
-        <div id="confirmItems"></div>
-        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-top:20px; font-size:1.2rem;">
-            <span>الإجمالي:</span>
-            <span><span id="confTotal">0</span> د.ع</span>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="executeSend()" style="flex:2; background:var(--secondary); color:white; border:none; padding:15px; border-radius:15px; font-weight:bold;">تأكيد وإرسال ✅</button>
-            <button onclick="closeConfirm()" style="flex:1; background:#eee; border:none; border-radius:15px;">رجوع</button>
-        </div>
+    <h3 id="cold">مشروبات غازية</h3>
+    <div class="menu-item">
+        <div class="item-count" id="cnt-pepsi">0</div>
+        <div class="item-info"><b>بيبسي</b><br><span class="price">1,000 د.ع</span></div>
+        <button class="add-btn" onclick="addToCart('بيبسي', 1000, 'pepsi')">+</button>
     </div>
 </div>
 
 <div class="cart-bar">
-    <div>إجمالي: <b id="totalPrice">0</b> د.ع</div>
-    <button class="order-btn" onclick="showConfirmation()">مراجعة الطلب</button>
+    <div>المجموع: <span id="totalPrice">0</span> د.ع</div>
+    <button class="confirm-btn" onclick="sendOrder()">إرسال الطلب</button>
 </div>
 
 <script>
-    // الرابط الخاص بك من صورتك السابقة
-    const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax';
-    
-    const params = new URLSearchParams(window.location.search);
-    const tableNo = params.get('table') || "غير محددة";
-    document.getElementById('tableLabel').innerText = "📍 طاولة رقم: " + tableNo;
-
     let cart = [];
+    let total = 0;
+    const SHEETDB_URL = 'https://sheetdb.io/api/v1/pzzp01p1lzqax';
 
     function addToCart(name, price, id) {
         cart.push({name, price, id});
         updateUI();
     }
 
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        updateUI();
-        cart.length > 0 ? showConfirmation() : closeConfirm();
-    }
-
     function updateUI() {
-        let total = cart.reduce((sum, item) => sum + item.price, 0);
+        total = cart.reduce((sum, item) => sum + item.price, 0);
         document.getElementById('totalPrice').innerText = total.toLocaleString();
-        
         document.querySelectorAll('.item-count').forEach(el => { el.innerText = '0'; el.style.display = 'none'; });
         cart.forEach(item => {
             const el = document.getElementById('cnt-' + item.id);
-            if(el) { 
-                el.innerText = parseInt(el.innerText) + 1; 
-                el.style.display = 'flex'; 
-            }
+            if(el) { el.innerText = parseInt(el.innerText) + 1; el.style.display = 'flex'; }
         });
     }
 
-    function showConfirmation() {
-        if(cart.length === 0) return;
-        const itemsDiv = document.getElementById('confirmItems');
-        itemsDiv.innerHTML = cart.map((item, index) => `
-            <div class="conf-item">
-                <span><span class="del-btn" onclick="removeFromCart(${index})">❌</span> ${item.name}</span>
-                <span>${item.price.toLocaleString()}</span>
-            </div>
-        `).join('');
-        document.getElementById('confTotal').innerText = cart.reduce((s,i)=>s+i.price,0).toLocaleString();
-        document.getElementById('confirmOverlay').style.display = 'flex';
-    }
-
-    function closeConfirm() { document.getElementById('confirmOverlay').style.display = 'none'; }
-
-    function executeSend() {
-        const orderID = Math.floor(1000 + Math.random() * 9000);
+    function sendOrder() {
+        if(cart.length === 0) return alert("السلة فارغة");
         const orderData = {
-            "order_id": "#" + orderID,
-            "table": tableNo,
+            "order_id": "#" + Math.floor(1000 + Math.random() * 9000),
             "items": cart.map(i => i.name).join(' + '),
-            "total_price": cart.reduce((s,i)=>s+i.price,0).toLocaleString() + " د.ع",
+            "total_price": total.toLocaleString() + " د.ع",
             "time": new Date().toLocaleTimeString('ar-EG')
         };
-
         fetch(SHEETDB_URL, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ "data": [orderData] })
         }).then(() => {
-            alert("تم إرسال طلبك بنجاح! رقم الطلب: #" + orderID);
-            cart = []; updateUI(); closeConfirm();
+            alert("تم إرسال طلبك!");
+            cart = []; updateUI();
         });
     }
 </script>
