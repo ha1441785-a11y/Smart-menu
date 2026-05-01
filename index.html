@@ -3,111 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم بالصور</title>
+    <title>نظام المنيو الذكي - النسخة الاحترافية</title>
     <style>
-        :root { --primary-color: #d35400; --secondary-color: #27ae60; --bg-color: #f8f9fb; --text-color: #333; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-color); margin: 0; padding: 15px; padding-bottom: 100px; color: var(--text-color); }
+        :root { --primary-color: #d35400; --secondary-color: #27ae60; --bg-color: #f4f7f6; --accent-color: #e74c3c; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-color); margin: 0; padding: 15px; padding-bottom: 120px; }
         .container { max-width: 600px; margin: auto; }
         
-        .header { text-align: center; padding: 25px; background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 25px; }
-        .header h1 { margin: 10px 0 0 0; font-size: 1.8rem; color: #2c3e50; }
+        /* الهيدر وزر النداء */
+        .header { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; position: relative; }
+        .call-waiter-btn { position: absolute; top: 15px; left: 15px; background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 0.8rem; box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3); }
         
-        /* تصميم الأقسام */
-        .category-title { background: #e67e22; color: white; padding: 12px 18px; border-radius: 12px; margin: 30px 0 15px 0; font-size: 1.3rem; font-weight: bold; box-shadow: 0 3px 8px rgba(230, 126, 34, 0.2); }
+        /* قسم العروض */
+        .offers-section { background: linear-gradient(45deg, #f39c12, #d35400); color: white; padding: 15px; border-radius: 15px; margin: 20px 0; text-align: center; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        /* تصميم العنصر مع الصورة */
-        .menu-item { background: white; display: flex; align-items: center; padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #f0f0f0; transition: transform 0.2s; }
-        .menu-item:active { transform: scale(0.98); }
-        
-        /* الصورة */
-        .item-image { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-left: 15px; border: 3px solid #eee; }
-        
-        .item-details { flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
-        .item-info { display: flex; flex-direction: column; }
-        .item-info b { font-size: 1.15rem; color: #2c3e50; margin-bottom: 4px; }
-        .item-info span { color: var(--secondary-color); font-weight: bold; font-size: 1.1rem; }
-        
-        .add-btn { background: var(--primary-color); color: white; border: none; border-radius: 10px; padding: 10px 18px; cursor: pointer; font-weight: bold; font-size: 0.95rem; box-shadow: 0 3px 6px rgba(211, 84, 0, 0.1); }
+        /* الأقسام */
+        .category-title { background: #34495e; color: white; padding: 10px 15px; border-radius: 10px; margin: 25px 0 15px 0; font-size: 1.2rem; }
 
-        /* سلة الطلبات العائمة */
-        .cart-summary { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 18px 20px; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-top-left-radius: 20px; border-top-right-radius: 20px; }
-        .cart-info { display: flex; flex-direction: column; font-size: 1rem; color: #7f8c8d; }
-        .cart-info b { font-size: 1.3rem; color: var(--text-color); }
-        .order-btn { background: var(--secondary-color); color: white; border: none; padding: 15px 35px; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2); }
+        /* العناصر */
+        .menu-item { background: white; display: flex; align-items: center; padding: 12px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #eee; position: relative; }
+        .item-image { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-left: 15px; }
+        .item-info { flex-grow: 1; }
+        .item-info b { display: block; font-size: 1.1rem; color: #2c3e50; }
+        .item-info .price { color: var(--secondary-color); font-weight: bold; font-size: 1.1rem; }
+        .best-seller-tag { position: absolute; top: -5px; right: 10px; background: #f1c40f; color: #000; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        
+        .add-btn { background: var(--primary-color); color: white; border: none; border-radius: 10px; padding: 10px 15px; cursor: pointer; font-weight: bold; }
+        .add-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+
+        /* السلة السفلي */
+        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-radius: 25px 25px 0 0; }
+        .order-btn { background: var(--secondary-color); color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div id="tableLabel" style="background:#f0f0f0; display:inline-block; padding:6px 18px; border-radius:25px; margin-bottom:12px; font-weight:bold; color:#7f8c8d;">طاولة رقم: ..</div>
-        <h1>🍽️ منيو مطعمنا بالصور</h1>
+        <button class="call-waiter-btn" onclick="callWaiter()">🔔 نداء النادل</button>
+        <div id="tableLabel" style="color: #7f8c8d; font-weight: bold; margin-bottom: 5px;">طاولة: ..</div>
+        <h1>🍽️ مطعم الرافدين السعيد</h1>
+        <p style="font-size: 0.9rem; color: #95a5a6;">أهلاً بك.. اختر وجبتك المفضلة</p>
     </div>
 
-    <div class="category-title">🥘 الأكلات الشرقية</div>
-    <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1619441201103-6a988d5754f2?q=80&w=200&auto=format&fit=crop" alt="قوزي عراقي" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>قوزي عراقي</b> <span>25,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('قوزي عراقي', 25000)">أضف +</button>
-        </div>
-    </div>
-    <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1598511757337-fe2cafc31ba0?q=80&w=200&auto=format&fit=crop" alt="كباب مشوي" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>كباب مشوي</b> <span>15,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('كباب مشوي', 15000)">أضف +</button>
-        </div>
+    <div class="offers-section">
+        🔥 <b>عرض اليوم:</b> اطلب وجبتين كباب واحصل على حمص بطحينة مجاناً!
     </div>
 
-    <div class="category-title">🍔 الأكلات الغربية</div>
+    <div class="category-title">🥘 أطباق شرقية</div>
     <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" alt="برجر لحم ملكي" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>برجر لحم ملكي</b> <span>8,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('برجر لحم ملكي', 8000)">أضف +</button>
+        <span class="best-seller-tag">🔥 الأكثر طلباً</span>
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=200" class="item-image">
+        <div class="item-info">
+            <b>قوزي عراقي على التمن</b>
+            <span class="price">25,000 د.ع</span>
         </div>
-    </div>
-    <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=200&auto=format&fit=crop" alt="بيتزا إيطالية" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>بيتزا إيطالية</b> <span>12,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('بيتزا إيطالية', 12000)">أضف +</button>
-        </div>
+        <button class="add-btn" onclick="addToCart('قوزي عراقي', 25000)">+</button>
     </div>
 
-    <div class="category-title">🥗 المقبلات</div>
-    <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1593967858208-fc7ca6378c55?q=80&w=200&auto=format&fit=crop" alt="حمص بطحينة" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>حمص بطحينة</b> <span>3,000 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('حمص بطحينة', 3000)">أضف +</button>
+    <div class="menu-item" style="opacity: 0.7;">
+        <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=200" class="item-image">
+        <div class="item-info">
+            <b>كباب لحم (نفذ)</b>
+            <span style="color: #e74c3c; font-weight: bold;">غير متوفر حالياً</span>
         </div>
+        <button class="add-btn" disabled>X</button>
     </div>
 
-    <div class="category-title">☕ المشروبات الساخنة والباردة</div>
+    <div class="category-title">🍹 المشروبات</div>
     <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1515696112952-4752b76cae93?q=80&w=200&auto=format&fit=crop" alt="عصير ليمون بارد" class="item-image">
-        <div class="item-details">
-            <div class="item-info"><b>عصير ليمون بارد</b> <span>2,500 د.ع</span></div>
-            <button class="add-btn" onclick="addToCart('عصير ليمون بارد', 2500)">أضف +</button>
+        <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=200" class="item-image">
+        <div class="item-info">
+            <b>عصير برتقال فريش</b>
+            <span class="price">4,000 د.ع</span>
         </div>
+        <button class="add-btn" onclick="addToCart('عصير برتقال', 4000)">+</button>
     </div>
 
 </div>
 
-<div class="cart-summary">
-    <div class="cart-info">
-        <span>الإجمالي:</span>
-        <b><span id="totalPrice">0</span> د.ع</b>
+<div class="cart-bar">
+    <div>
+        <span style="font-size: 0.9rem; color: #7f8c8d;">الإجمالي:</span><br>
+        <b style="font-size: 1.4rem;"><span id="totalPrice">0</span> د.ع</b>
     </div>
     <button class="order-btn" onclick="sendToWhatsApp()">إرسال الطلب ✅</button>
 </div>
 
 <script>
-    // ضع رقمك الحقيقي هنا لاختبار الواتساب
-    const restaurantPhone = "9647772702075"; 
+    // 1. ضع رقمك الحقيقي هنا
+    const restaurantPhone = "9647518856706"; 
 
+    // 2. توليد رقم طلب عشوائي لتمييز الطلبات
+    const orderID = Math.floor(1000 + Math.random() * 9000);
+
+    // 3. قراءة رقم الطاولة من الرابط
     const params = new URLSearchParams(window.location.search);
     const tableNo = params.get('table') || "غير محددة";
     document.getElementById('tableLabel').innerText = "طاولة رقم: " + tableNo;
@@ -121,10 +111,17 @@
         document.getElementById('totalPrice').innerText = total.toLocaleString();
     }
 
+    // ميزة نداء النادل
+    function callWaiter() {
+        let msg = `🔔 نداء مساعدة!%0Aطاولة رقم: ${tableNo}%0Aالوقت: ${new Date().toLocaleTimeString('ar-EG')}`;
+        window.open(`https://wa.me/${restaurantPhone}?text=${msg}`);
+    }
+
+    // إرسال الطلب مع رقم الطلب العشوائي
     function sendToWhatsApp() {
         if(cart.length === 0) { alert("السلة فارغة!"); return; }
         let itemsList = cart.map(i => "- " + i.name).join('%0A');
-        let message = `طلب جديد من طاولة رقم: ${tableNo}%0A%0Aالطلبات:%0A${itemsList}%0A%0Aالإجمالي: ${total.toLocaleString()} د.ع`;
+        let message = `📝 طلب جديد رقم: #${orderID}%0A📍 طاولة رقم: ${tableNo}%0A%0Aالطلبات:%0A${itemsList}%0A%0A💰 الإجمالي: ${total.toLocaleString()} د.ع%0A%0Aيرجى تأكيد الطلب من قبلكم.`;
         window.open(`https://wa.me/${restaurantPhone}?text=${message}`);
     }
 </script>
